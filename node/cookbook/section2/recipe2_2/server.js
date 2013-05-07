@@ -20,6 +20,12 @@ http.createServer(function (req, res){
 		return;
 	    }
 	    res.write(file.name + ' is received\n');
+	}).on('fileBegin', function(field,file){
+	    if(file.name){
+		file.path += '-' + file.name;
+	    }
+	}).on('field', function (field, value) {
+	    res.write(field + ' : ' + value + '\n');
 	}).on('end', function() {
 	    res.end('received all files');
 	});
