@@ -14,18 +14,30 @@ function buildXml(rootObj, rootName){
 //        console.log("travarse");
 //        console.log(obj);
         Object.keys(obj).forEach(function (key) {
-            console.log('key is ' + key);
+//            console.log('key is ' + key);
             var open = '<' + key + '>';
             var close = '</' + key + '>\n';
-            var isTxt = (obj[key] && {}.toString.call(obj[key]) !== '[object Object]');
+            var nonObj = (obj[key] && {}.toString.call(obj[key]) != "[object Object]");
+            var isArray = Array.isArray(obj[key]);
+            var isFunc = (typeof obj[key] == "function");
+
+            if(isArray){
+                obj[key] .forEach(function (xmlNode){
+                    var childNode = {};
+                    childNode[key] = xmlNode;
+                    traverse(childNode);
+                });
+                return;
+            }
+
             xml += open;
 
-            console.log('mark');
-            console.log(obj[key]);
-            console.log({}.toString.call(obj[key]));
-            
-            if(isTxt){
-                xml += obj[key];
+//            console.log('mark');
+  //          console.log(obj[key]);
+    //        console.log({}.toString.call(obj[key]));
+
+            if(nonObj){
+                xml += (isFunc) ? obj[key]() : obj[key];
                 xml += close;
                 return;
             }
@@ -41,7 +53,7 @@ function buildXml(rootObj, rootName){
 }
 
 profiles = buildXml(profiles, 'profiles').replace(/name/g, 'fullname');
-//console.log(profiles);
+console.log(profiles);
 
 parser.parseString(profiles, function(err, obj){
     profiles = obj.profiles;
@@ -49,5 +61,5 @@ parser.parseString(profiles, function(err, obj){
 //    console.log(profiles.ryan);
 });
 
-//console.log(profiles);
+console.log(profiles);
 
