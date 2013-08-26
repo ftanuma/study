@@ -24,9 +24,9 @@
            output.innerHTML += logStr('Sent', msg);
          });
 
-         socket.onmessage = function (e) {
-           output.innerHTML += logStr('Received', e.data);
-         }
+         socket.on('message', function (msg) {
+           output.innerHTML += logStr('Received', msg);
+         });
        });
      }());
     </script>
