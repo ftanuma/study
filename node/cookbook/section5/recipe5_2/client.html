@@ -24,6 +24,11 @@
            output.innerHTML += logStr('Sent', msg);
          });
 
+         socket.on('hello', function(msg) {
+           output.innerHTML += '<div>Hello ' + msg + '</div>';
+           socket.emit('helloback', 'Client 1');
+         });
+         
          socket.on('message', function (msg) {
            output.innerHTML += logStr('Received', msg);
          });
